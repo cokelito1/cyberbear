@@ -101,12 +101,10 @@ async def prune(ctx, name = ""):
         if z.name == "Temporales":
             for i in z.channels:
                 if len(i.members) == 0:
-                    for j in tmp_roles:
+                    for j in ctx.message.guild.roles:
                         if j.name == i.name:
                             await j.delete()
-                            tmp_roles.remove(j)
                     await i.delete()
-                    tmp_channels.remove(i)
            
 
     await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
@@ -141,6 +139,33 @@ async def mai(ctx):
     new_guild_check(ctx.guild.id)
     await ctx.send(file=discord.File(get_random_image("./mai/")))
     await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
+
+@bot.command(brief="cb.add", description="Dar rol a alguien para canal temporal")
+async def add(ctx):
+    if ctx.message.author.voice != None:
+        if ctx.message.author.voice.channel != None:
+            if ctx.message.author.voice.channel.category != None:
+                if ctx.message.author.voice.channel.category.name == "Temporales":
+                    role = ctx.message.guild.roles[0]
+                    for a in ctx.message.guild.roles:
+                        if a.name == ctx.message.author.voice.channel.name:
+                            role = a
+                    for i in ctx.message.mentions:        
+                                await i.add_roles(role)
+
+                    await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
+                else:
+                    await ctx.send("Este canal debe pertenecer a la categoria de Temporales")
+                    await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
+            else:
+                await ctx.send("Este canal debe pertenecer a la categoria de Temporales")
+                await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
+        else:
+            await ctx.send("Necesitas estar conectado a un canal de voz para ocupar este comando")
+            await ctx.message.add_reaction(guilds[ctx.guild.id].emoji) 
+    else:
+        await ctx.send("Necesitas estar conectado a un canal de voz para ocupar este comando")
+        await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
 
 def save():
     file = 'guilds.json'
