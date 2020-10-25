@@ -1,11 +1,12 @@
 import discord
 from discord.ext import commands
+
 import os
 import random
+import json
+
 from guild import Guild
 from guild import GuildEncoder
-import json
-import pickle
 
 token = os.getenv('CYBER_BEAR_TOKEN')
 default_emoji = '\N{White Heavy Check Mark}'
