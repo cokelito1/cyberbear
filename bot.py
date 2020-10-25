@@ -3,6 +3,8 @@ from discord.ext import commands
 import os
 import random
 from guild import Guild
+from guild import GuildEncoder
+import json
 import pickle
 
 token = os.getenv('CYBER_BEAR_TOKEN')
@@ -90,13 +92,12 @@ async def prune(ctx, name = ""):
             if i.name == '<tmp> ' + name:
                 await i.delete()
         
-        await ctx.message.add_reaction(emoji)
+        await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
         print("Pruned {}".format(name))       
         return
     
     for z in ctx.guild.categories:
-        print(z.name)
-        if z.name == "Trabajos":
+        if z.name == "Temporales":
             for i in z.channels:
                 if len(i.members) == 0:
                     for j in tmp_roles:
@@ -135,9 +136,9 @@ async def futaba(ctx):
     await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
 
 def save():
-    file = 'guilds.pick'
-    with open(file, 'wb') as f:
-        pickle.dump(guilds, f)
+    file = 'guilds.json'
+    with open(file, 'w') as f:
+        json.dump(guilds, f, cls=GuildEncoder, indent=4)
 
 @bot.command()
 async def set_prefix(ctx, prefix=""):
@@ -170,11 +171,11 @@ async def print_guilds(ctx):
     print(guilds)
 
 
+with open('guilds.json', 'r') as f:
+    tmp_guilds = json.load(f)
+    for key in tmp_guilds:
+        guilds[int(key)] = Guild(tmp_guilds[key]["id"], tmp_guilds[key]["prefix"], tmp_guilds[key]["emoji"])
+        print(int(key), guilds[int(key)].id, guilds[int(key)].prefix, guilds[int(key)].emoji)
 
-with open('guilds.pick', 'rb') as f:
-    data = f.read()
-    guilds = pickle.loads(data)
-    for key in guilds:
-        print(key, " ", guilds[key].prefix)
 print('Starting bot with token {}'.format(token))
 bot.run(token)
