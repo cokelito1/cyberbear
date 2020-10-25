@@ -135,6 +135,12 @@ async def futaba(ctx):
     await ctx.send(file=discord.File(get_random_image("./futaba/")))
     await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
 
+@bot.command(brief="cb.mai", description="Una mai para memineitor")
+async def mai(ctx):
+    new_guild_check(ctx.guild.id)
+    await ctx.send(file=discord.File(get_random_image("./mai/")))
+    await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
+
 def save():
     file = 'guilds.json'
     with open(file, 'w') as f:
@@ -158,10 +164,11 @@ async def set_emoji(ctx, emo: discord.PartialEmoji):
     new_guild_check(ctx.guild.id)
 
     if ctx.message.author.guild_permissions.administrator:
-        guilds[ctx.guild.id].emoji = str(emo)
-        await ctx.send("El nuevo emoji es " + str(guilds[ctx.guild.id].emoji))
-        await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
-        save()
+        if emo.is_custom_emoji():
+            guilds[ctx.guild.id].emoji = str(emo)
+            await ctx.send("El nuevo emoji es " + str(guilds[ctx.guild.id].emoji))
+            await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
+            save()
     else:
         await ctx.send("Solo lo puede ocupar un administrador")
         await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
@@ -169,7 +176,6 @@ async def set_emoji(ctx, emo: discord.PartialEmoji):
 @bot.command()
 async def print_guilds(ctx):
     print(guilds)
-
 
 with open('guilds.json', 'r') as f:
     tmp_guilds = json.load(f)
