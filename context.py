@@ -2,6 +2,8 @@ from guild import Guild
 from guild import GuildEncoder
 
 import json
+import os.path
+from os import path
 
 default_emoji = '\N{White Heavy Check Mark}'
 
@@ -30,11 +32,12 @@ class Context(metaclass=SingletonMeta):
     def __init__(self):
         self.guilds = {}
 
-        with open('guilds.json', 'r') as f:
-            tmp_guilds = json.load(f)
-            for key in tmp_guilds:
-                self.guilds[int(key)] = Guild(tmp_guilds[key]["id"], tmp_guilds[key]["prefix"], tmp_guilds[key]["emoji"])
-                print(int(key), self.guilds[int(key)].id, self.guilds[int(key)].prefix, self.guilds[int(key)].emoji)
+        if path.exists("guilds.json"):
+            with open('guilds.json', 'r') as f:
+                tmp_guilds = json.load(f)
+                for key in tmp_guilds:
+                    self.guilds[int(key)] = Guild(tmp_guilds[key]["id"], tmp_guilds[key]["prefix"], tmp_guilds[key]["emoji"])
+                    print(int(key), self.guilds[int(key)].id, self.guilds[int(key)].prefix, self.guilds[int(key)].emoji)
 
     def check_guild(self, guild_id):
         return guild_id in self.guilds
