@@ -125,10 +125,6 @@ class Canales(Cog):
                 await i.add_roles(c)
 
             await ctx.message.author.add_roles(c)
-
-            tmp_channels.append(ch)
-            tmp_roles.append(c)
-
             await ctx.message.add_reaction(guilds[ctx.guild.id].emoji)
 
         except Exception as e:
