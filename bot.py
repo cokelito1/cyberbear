@@ -10,6 +10,9 @@ from guild import Guild
 from guild import GuildEncoder
 
 from context import Context
+from helper import get_random_image
+
+from Cogs.WaifuCog import Waifus
 
 token = os.getenv('CYBER_BEAR_TOKEN')
 
@@ -18,36 +21,6 @@ if token == None:
     exit(0)
 
 context = Context()
-
-def get_random_image(path):
-    return path + random.choice([x for x in os.listdir(path)
-               if os.path.isfile(os.path.join(path, x))])
-
-class Waifus(Cog):
-    """Commands related to waifus"""
-
-    @commands.command(pass_context=True, brief='Envia una waifu al canal', description="Selecciona una waifu de la carpeta waifus en el directorio que se ejecuto el bot")
-    async def waifu(self, ctx):
-        context.new_guild_check(ctx.guild.id)
-
-        if ctx.channel.is_nsfw():
-            await ctx.send(file=discord.File(get_random_image("./waifus/")))
-            await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
-        else:
-            await ctx.send('Solo se puede usar en canales nsfw')
-            await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
-
-    @commands.command(pass_context=True, brief="Envia una foto de futaba al canal", description="Selecciona una imagen de futaba de la carpeta futaba especificamente para memineitor")
-    async def futaba(self, ctx):
-        context.new_guild_check(ctx.guild.id)
-        await ctx.send(file=discord.File(get_random_image("./futaba/")))
-        await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
-
-    @commands.command(pass_context=True, brief="Envia una foto de mai al canal", description="Selecciona una imagen de mai de la carpeta futaba especificamente para mai")
-    async def mai(self, ctx):
-        context.new_guild_check(ctx.guild.id)
-        await ctx.send(file=discord.File(get_random_image("./mai/")))
-        await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
 
 class Administration(Cog):
     """Commands related to administration"""
