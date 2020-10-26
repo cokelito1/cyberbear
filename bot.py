@@ -13,6 +13,7 @@ from context import Context
 from helper import get_random_image
 
 from Cogs.WaifuCog import Waifus
+from Cogs.MiscCog import Misc
 
 token = os.getenv('CYBER_BEAR_TOKEN')
 
@@ -139,16 +140,6 @@ class Canales(Cog):
         else:
             await ctx.send("Necesitas estar conectado a un canal de voz para ocupar este comando")
             await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
-
-class Misc(Cog):
-    """Miscelanneous commands"""
-
-    @commands.command(pass_context="True", brief="una imagen random", description="Una imagen random de la carpeta del basti")
-    async def image(self, ctx):
-        context.new_guild_check(ctx.guild.id)
-
-        await ctx.send(file=discord.File(get_random_image("./images/")))
-        await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
 
 
 bot = commands.Bot(command_prefix=context.determine_prefix)
