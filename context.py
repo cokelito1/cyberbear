@@ -39,6 +39,7 @@ class Context(metaclass=SingletonMeta):
                     t_id = key
                     t_prefix = "cb."
                     t_emoji = default_emoji
+                    t_mute_role = -1
 
                     if "id" in tmp_guilds[key]:
                         t_id = tmp_guilds[key]["id"]
@@ -48,9 +49,12 @@ class Context(metaclass=SingletonMeta):
 
                     if "emoji" in tmp_guilds[key]:
                         t_emoji = tmp_guilds[key]["emoji"]
+                    
+                    if "mute_role" in tmp_guilds[key]:
+                        t_mute_role = int(tmp_guilds[key]["mute_role"])
 
-                    self.guilds[int(key)] = Guild(t_id, t_prefix, t_emoji)
-                    print(int(key), self.guilds[int(key)].id, self.guilds[int(key)].prefix, self.guilds[int(key)].emoji)
+                    self.guilds[int(key)] = Guild(t_id, t_prefix, t_emoji, t_mute_role)
+                    print(int(key), self.guilds[int(key)].id, self.guilds[int(key)].prefix, self.guilds[int(key)].emoji, self.guilds[int(key)].mute_role)
 
     def check_guild(self, guild_id):
         return guild_id in self.guilds

@@ -1,10 +1,11 @@
 import json
 
 class Guild:
-    def __init__(self, id, prefix, emoji):
+    def __init__(self, id, prefix, emoji, mute_role):
         self.id = id
         self.prefix = prefix
         self.emoji = emoji
+        self.mute_role = mute_role
 
 class GuildEncoder(json.JSONEncoder):
     def default(self, obj):
