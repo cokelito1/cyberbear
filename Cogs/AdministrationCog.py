@@ -55,6 +55,22 @@ class Administration(Cog):
             await ctx.send("Solo lo puede ocupar un administrador")
             await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
 
+    @commands.command(pass_context=True, brief="unmute", description="unmute person")
+    async def unmute(self, ctx, user: discord.Member):
+        context.new_guild_check(ctx.guild.id)
+
+        if ctx.message.author.guild_permissions.administrator:
+            if context.guilds[ctx.guild.id] != -1:
+                role = get(ctx.guild.roles, id=context.guilds[ctx.guild.id].mute_role)
+
+                await user.remove_roles(role)
+                await ctx.send("Se desmuteo a " + str(user))
+                await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+
+        else:
+            await ctx.send("Solo lo puede ocupar un administrador")
+            await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+
     @commands.command(pass_context=True, brief="setear rol de muteo", description="Poner el rol de muteo")
     async def set_mute_role(self, ctx, role: discord.Role):
         context.new_guild_check(ctx.guild.id)
