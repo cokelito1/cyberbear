@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Cog
+from discord.utils import get
 
 from context import Context
 
@@ -16,8 +17,13 @@ class Canales(Cog):
         try:
             name = '<tmp> ' + channel_name
 
-            category = ctx.guild.categories[-1]
+            if context.guilds[ctx.guild.id].tmp_category == -1:
+                await ctx.send("configure la categoria")
+                await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
 
+                return
+
+            category = get(ctx.guild.categories, id=context.guilds[ctx.guild.id].tmp_category)
             c = await ctx.guild.create_role(name=name)
 
             overwrites = {
@@ -55,9 +61,9 @@ class Canales(Cog):
             return
         
         for z in ctx.guild.categories:
-            if z.name == "Temporales":
+            if z.id == context.guilds[ctx.guild.id].tmp_category:
                 for i in z.channels:
-                    if len(i.members) == 0:
+                    if len(i.members) == 0 and i.name.startswith('<tmp> '):
                         for j in ctx.message.guild.roles:
                             if j.name == i.name:
                                 await j.delete()

@@ -84,3 +84,22 @@ class Administration(Cog):
         else:
             await ctx.send("Solo lo puede ocupar un administrador")
             await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+
+    @commands.command(pass_context=True, brief="setear categoria de canales temporales")
+    async def set_tmp_category(self, ctx, cat):
+        context.new_guild_check(ctx.guild.id)
+
+        if ctx.message.author.guild_permissions.administrator:
+            category = get(ctx.guild.categories, name=cat)
+
+            if category == None:
+                await ctx.send("No se encontro la categoria")
+                await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+            else:
+                context.guilds[ctx.guild.id].tmp_category = category.id
+                context.save()
+                await ctx.send("Nueva categoria lista")
+                await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+        else:
+            await ctx.send("Solo lo puede ocupar un administrador")
+            await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
