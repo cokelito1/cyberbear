@@ -36,7 +36,20 @@ class Context(metaclass=SingletonMeta):
             with open('guilds.json', 'r') as f:
                 tmp_guilds = json.load(f)
                 for key in tmp_guilds:
-                    self.guilds[int(key)] = Guild(tmp_guilds[key]["id"], tmp_guilds[key]["prefix"], tmp_guilds[key]["emoji"])
+                    t_id = key
+                    t_prefix = "cb."
+                    t_emoji = default_emoji
+
+                    if "id" in tmp_guilds[key]:
+                        t_id = tmp_guilds[key]["id"]
+
+                    if "prefix" in tmp_guilds[key]:
+                        t_prefix = tmp_guilds[key]["prefix"]
+
+                    if "emoji" in tmp_guilds[key]:
+                        t_emoji = tmp_guilds[key]["emoji"]
+
+                    self.guilds[int(key)] = Guild(t_id, t_prefix, t_emoji)
                     print(int(key), self.guilds[int(key)].id, self.guilds[int(key)].prefix, self.guilds[int(key)].emoji)
 
     def check_guild(self, guild_id):
