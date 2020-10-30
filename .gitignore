@@ -10,6 +10,7 @@ start.bat
 
 compress.bat
 images.tar.gz
+*.zip
 *.sh
 *.bat
 *.ps1
