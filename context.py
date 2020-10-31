@@ -4,6 +4,7 @@ from guild import GuildEncoder
 import json
 import os.path
 from os import path
+from waifu import WaifuData
 
 default_emoji = '\N{White Heavy Check Mark}'
 
@@ -31,6 +32,7 @@ class SingletonMeta(type):
 class Context(metaclass=SingletonMeta):
     def __init__(self):
         self.guilds = {}
+        self.waifus = {}
 
         if path.exists("guilds.json"):
             with open('guilds.json', 'r') as f:
@@ -59,6 +61,14 @@ class Context(metaclass=SingletonMeta):
 
                     self.guilds[int(key)] = Guild(t_id, t_prefix, t_emoji, t_mute_role, t_tmp_category)
                     print(int(key), self.guilds[int(key)].id, self.guilds[int(key)].prefix, self.guilds[int(key)].emoji, self.guilds[int(key)].mute_role, self.guilds[int(key)].tmp_category)
+        
+        for x in os.listdir("./waifus_data/"):
+            with open("./waifus_data/" + x) as f:
+                tmp_data = json.load(f)
+                self.waifus[tmp_data["nombre"]] = WaifuData(tmp_data["nombre"], tmp_data["serie"], tmp_data["image_url"])
+
+        for a in self.waifus:
+            print(a)     
 
     def check_guild(self, guild_id):
         return guild_id in self.guilds
