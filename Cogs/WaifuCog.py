@@ -34,6 +34,16 @@ def levenshtein(seq1, seq2):
                 )
     return (matrix[size_x - 1, size_y - 1])
 
+def is_prefix(orig, prefix):
+    if len(prefix) > len(orig):
+        return False
+
+    for i in range(len(prefix)):
+        if prefix[i] != orig[i]:
+            return False
+
+    return True
+
 context = Context()
 
 def closestKey(data, val):
@@ -89,12 +99,19 @@ class Waifus(Cog):
             await ctx.send(embed=emb)
             await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
         else:
-            key = closestKey(context.waifus, name)
+            key = None
+            for a in context.waifus:
+                if is_prefix(a.lower(), name.lower()):
+                    key = a
+                    break
+            
+            if key == None:
+                key = closestKey(context.waifus, name)
             if key == None:
                 await ctx.send("no se encontro una waifu con ese nombre")
                 await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
             else:
-                waifu = context.waifus[closestKey(context.waifus, name)]
+                waifu = context.waifus[key]
                 emb = discord.Embed(title="Tu nueva waifu", color=0xc32222)
                 emb.add_field(name="Nombre", value=waifu.name, inline=True)
                 emb.add_field(name="Serie", value=waifu.serie, inline=True)
