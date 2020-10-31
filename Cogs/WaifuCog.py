@@ -81,9 +81,9 @@ class Waifus(Cog):
 
         if name == "":
             waifu = get_random_waifu_data()
-            emb = discord.Embed(title="Tu nueva waifu", color=0x00ff00)
-            emb.add_field(name="Nombre", value=waifu.name, inline=False)
-            emb.add_field(name="Serie", value=waifu.serie, inline=False)
+            emb = discord.Embed(title="Tu nueva waifu", color=0xc32222)
+            emb.add_field(name="Nombre", value=waifu.name, inline=True)
+            emb.add_field(name="Serie", value=waifu.serie, inline=True)
             emb.set_image(url=waifu.url)
 
             await ctx.send(embed=emb)
@@ -95,9 +95,9 @@ class Waifus(Cog):
                 await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
             else:
                 waifu = context.waifus[closestKey(context.waifus, name)]
-                emb = discord.Embed(title="Tu nueva waifu", color=0x00ff00)
-                emb.add_field(name="Nombre", value=waifu.name, inline=False)
-                emb.add_field(name="Serie", value=waifu.serie, inline=False)
+                emb = discord.Embed(title="Tu nueva waifu", color=0xc32222)
+                emb.add_field(name="Nombre", value=waifu.name, inline=True)
+                emb.add_field(name="Serie", value=waifu.serie, inline=True)
                 emb.set_image(url=waifu.url)
 
                 await ctx.send(embed=emb)
