@@ -70,6 +70,12 @@ class Context(metaclass=SingletonMeta):
         for a in self.waifus:
             print(a)     
 
+    def reload(self):
+        for x in os.listdir("./waifus_data/"):
+            with open("./waifus_data/" + x) as f:
+                tmp_data = json.load(f)
+                self.waifus[tmp_data["nombre"]] = WaifuData(tmp_data["nombre"], tmp_data["serie"], tmp_data["image_url"])
+
     def check_guild(self, guild_id):
         return guild_id in self.guilds
 

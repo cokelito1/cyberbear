@@ -103,3 +103,14 @@ class Administration(Cog):
         else:
             await ctx.send("Solo lo puede ocupar un administrador")
             await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+
+    @commands.command(pass_context=True)
+    async def reload(self, ctx):
+        if ctx.message.author.guild_permissions.administrator:
+            context.reload()
+
+            await ctx.send("reload listo")
+            await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji) 
+        else:
+            await ctx.send("Solo lo puede ocupar un administrador")
+            await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
