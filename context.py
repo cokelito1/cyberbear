@@ -5,6 +5,7 @@ import json
 import os.path
 from os import path
 from waifu import WaifuData
+import requests
 
 default_emoji = '\N{White Heavy Check Mark}'
 
@@ -61,20 +62,51 @@ class Context(metaclass=SingletonMeta):
 
                     self.guilds[int(key)] = Guild(t_id, t_prefix, t_emoji, t_mute_role, t_tmp_category)
                     print(int(key), self.guilds[int(key)].id, self.guilds[int(key)].prefix, self.guilds[int(key)].emoji, self.guilds[int(key)].mute_role, self.guilds[int(key)].tmp_category)
-        
-        for x in os.listdir("./waifus_data/"):
-            with open("./waifus_data/" + x) as f:
-                tmp_data = json.load(f)
-                self.waifus[tmp_data["nombre"]] = WaifuData(tmp_data["nombre"], tmp_data["serie"], tmp_data["image_url"])
+
+        try:
+            r_waifus = requests.get("http://localhost:3000/api/waifus")
+            r_series = requests.get("http://localhost:3000/api/series")
+
+            tmp_series = {}
+            if r_series.status_code == 200:
+                series_json = r_series.json()
+                for obj in series_json:
+                    tmp_series[obj["_id"]] = obj["nombre"]
+
+                if r_waifus.status_code == 200:
+                    waifus_json = r_waifus.json()
+                    for waifu in waifus_json:
+                        self.waifus[waifu["nombre"]] = WaifuData(waifu["nombre"], tmp_series[waifu["serie_id"]], waifu["image_url"])
+            else:
+                print("error al solicitar series: " + r_series.status_code)
+        except:
+            print("error al solicitar al api")
 
         for a in self.waifus:
             print(a)     
 
     def reload(self):
-        for x in os.listdir("./waifus_data/"):
-            with open("./waifus_data/" + x) as f:
-                tmp_data = json.load(f)
-                self.waifus[tmp_data["nombre"]] = WaifuData(tmp_data["nombre"], tmp_data["serie"], tmp_data["image_url"])
+        try:
+            r_waifus = requests.get("http://localhost:3000/api/waifus")
+            r_series = requests.get("http://localhost:3000/api/series")
+
+            tmp_series = {}
+            if r_series.status_code == 200:
+                series_json = r_series.json()
+                for obj in series_json:
+                    tmp_series[obj["_id"]] = obj["nombre"]
+
+                if r_waifus.status_code == 200:
+                    waifus_json = r_waifus.json()
+                    for waifu in waifus_json:
+                        self.waifus[waifu["nombre"]] = WaifuData(waifu["nombre"], tmp_series[waifu["serie_id"]], waifu["image_url"])
+            else:
+                print("error al solicitar series: " + r_series.status_code)
+        except:
+            print("error al solicitar al api")
+
+        for a in self.waifus:
+            print(a)     
 
     def check_guild(self, guild_id):
         return guild_id in self.guilds
