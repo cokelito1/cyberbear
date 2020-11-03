@@ -6,6 +6,8 @@ from context import Context
 
 from helper import get_random_image
 
+import time
+
 context = Context()
 
 class Misc(Cog):
@@ -23,10 +25,11 @@ class Misc(Cog):
         context.new_guild_check(ctx.guild.id)
 
         i = 0
+        timestr = time.strftime("%Y%m%d-%H%M%S")
         for img in ctx.message.attachments:
-            with open("./images/" + ctx.author.name + "_" + str(i) + "_" + img.filename, "wb") as f:
+            with open("./images/" + ctx.author.name + "_" + str(i) + "_" + timestr + "_" + img.filename, "wb") as f:
                 await img.save(f)
-                print("se guardo " + "./images/" + ctx.author.name + "_" + str(i) + "_" + img.filename)
+                print("se guardo " + "./images/" + ctx.author.name + "_" + str(i) + "_" + timestr + "_" + img.filename)
             i = i + 1
 
         await ctx.send("Se guardaron las imagenes")
