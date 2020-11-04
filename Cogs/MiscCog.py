@@ -27,9 +27,14 @@ class Misc(Cog):
         i = 0
         timestr = time.strftime("%Y%m%d-%H%M%S")
         for img in ctx.message.attachments:
-            with open("./images/" + ctx.author.name + "_" + str(i) + "_" + timestr + "_" + img.filename, "wb") as f:
-                await img.save(f)
-                print("se guardo " + "./images/" + ctx.author.name + "_" + str(i) + "_" + timestr + "_" + img.filename)
+            try:
+                with open("./images/" + ctx.author.name + "_" + str(i) + "_" + timestr + "_" + img.filename, "wb") as f:
+                    await img.save(f)
+                    print("se guardo " + "./images/" + ctx.author.name + "_" + str(i) + "_" + timestr + "_" + img.filename)
+            except:
+                await ctx.send("Hubo un error al guardar imagen")
+                await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+
             i = i + 1
 
         await ctx.send("Se guardaron las imagenes")
