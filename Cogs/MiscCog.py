@@ -24,7 +24,7 @@ class Misc(Cog):
     async def memineitor(self, ctx):
         context.new_guild_check(ctx.guild.id)
 
-        await ctx.send(file=discord.File(get_random_image("./memineitor")))
+        await ctx.send(file=discord.File(get_random_image("./memineitor/")))
         await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
 
     @commands.command(pass_context="True", brief="Envia una imagen al server")
