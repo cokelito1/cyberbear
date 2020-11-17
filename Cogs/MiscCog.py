@@ -53,3 +53,25 @@ class Misc(Cog):
 
         await ctx.send("Se guardaron las imagenes")
         await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+
+    @commands.command(pass_context="True", brief="envia una play al server")
+    async def send_image(self, ctx):
+        context.new_guild_check(ctx.guild.id)
+
+        i = 0
+        timestr = time.strftime("%Y%m%d-%H%M%S")
+        for img in ctx.message.attachments:
+            try:
+                with open("./plays/" + ctx.author.name + "_" + str(i) + "_" + timestr + "_" + img.filename, "wb") as f:
+                    await img.save(f)
+                    print("se guardo " + "./plays/" + ctx.author.name + "_" + str(i) + "_" + timestr + "_" + img.filename)
+            except:
+                await ctx.send("Hubo un error al guardar la play")
+                await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+
+            i = i + 1
+
+        await ctx.send("Se guardaron las plays")
+        await ctx.message.add_reaction(context.guilds[ctx.guild.id].emoji)
+
+
